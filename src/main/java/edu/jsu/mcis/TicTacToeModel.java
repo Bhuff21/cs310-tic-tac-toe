@@ -4,7 +4,7 @@ public class TicTacToeModel {
     
     private Mark[][] board; /* Game board */
     private boolean xTurn;  /* True if X is current player */
-    private final int width;      /* Size of game board */
+    private int width;      /* Size of game board */
     
     /* ENUM TYPE DEFINITIONS */
     
@@ -62,7 +62,7 @@ public class TicTacToeModel {
     
     /* CONSTRUCTOR */
     
-    public TicTacToeModel(final int width) {
+    public TicTacToeModel(int width) {
         
         /* Initialize width; X goes first */
         
@@ -87,55 +87,65 @@ public class TicTacToeModel {
         
     }
 	
-    public boolean makeMark(final int row, final int col) {
+    public boolean makeMark( int row, int col) {
         
         /* Use "isValidSquare()" to check if the specified location is in range,
            and use "isSquareMarked()" to see if the square is empty!  If the
            specified location is valid, make a mark for the current player, then
            toggle "xTurn" from true to false (or vice-versa) to switch to the
            other player before returning TRUE.  Otherwise, return FALSE. */
-        if ((isValidSquare(row, col) == true ) && (isSquareMarked(row, col) == false)) {
+        if (isValidSquare(row, col) && !isSquareMarked(row, col))  {
 
             if (isXTurn()) {
 
                 board[row][col] = Mark.X;
+
+                xTurn = false;
             }
             else{
 
-                board [row][col] = Mark.O;
+                board[row][col] = Mark.O;
            
+                xTurn = true;
             }
-            xTurn = !xTurn;
+            
             return true;
 
         }
-        // INSERT YOUR CODE HERE
+       
         return false; // remove this line later!
         }
     
 	
-    private boolean isValidSquare(final int row, final int col) {
+    private boolean isValidSquare( int row, int col) {
         
         /* Return TRUE if the specified location is within the bounds of the board */
         if ((row < width && row > -1) && (col < width && col > -1)) {
+           
             return true;
         }
-        return xTurn;
+
+        else{
+
+        
+             return false;
         }
+    }
     
 	
-    private boolean isSquareMarked(final int row, final int col) {
+    private boolean isSquareMarked(int row, int col) {
         
         /* Return TRUE if the square at specified location is marked */
-        if (board[row][col] != Mark.EMPTY){
+        if (!board[row][col].equals(Mark.EMPTY)){
             return true;
         }
-        // INSERT YOUR CODE HERE
-        return xTurn;
-      
+        
+        else {
+            return false;
+        }
     }
 	
-    public Mark getMark(final int row, final int col) {
+    public Mark getMark(int row, int col) {
         
         /* Return the mark from the square at the specified location */
         
@@ -152,23 +162,24 @@ public class TicTacToeModel {
            value */
         
         // INSERT YOUR CODE HERE
-        if (isMarkWin(Mark.X)){
+        if (isMarkWin(Mark.X) == true){
             return Result.X;
           }
-          if (isMarkWin(Mark.O)){
+          if (isMarkWin(Mark.O) == true){
              return Result.O;
           }
-          if (isTie()){
+          if (isTie() == true){
               return Result.TIE;
           }
-        return null;
-          
+          else{
+        return Result.NONE;
+          }
 
         
         
     }
 	
-    private boolean isMarkWin(final Mark mark) {
+    private boolean isMarkWin(Mark mark) {
         
         /* Check the squares of the board to see if the specified mark is the
            winner */
@@ -223,10 +234,18 @@ public class TicTacToeModel {
            }   
               
        }
-       if (horoCount == width || vertCount == width || downRight == width || upRight == width){
-           return true;
-           
+       if (horoCount == width ){
+           return true;  
        }
+       else if (vertCount == width ){
+        return true;  
+    }
+    else if (downRight == width ){
+        return true;  
+    }
+    else if (upRight == width ){
+        return true;
+    }
 
        return false; // remove this line later!
     }
@@ -248,9 +267,9 @@ public class TicTacToeModel {
         if (emptySpots == 0){
             return true;
         }
-
+        else{
         return false; // remove this line later!
-        
+        }
     }
 
     public boolean isGameover() {
